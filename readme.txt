@@ -23,7 +23,7 @@ Please note that this version is still in the works.  I will update this descrip
 
 == Screenshots ==
 
-1. wordpress-slideshow-plugin-editor.jpg
+1. screenshot-1.jpg
 
 == Changelog ==
 
