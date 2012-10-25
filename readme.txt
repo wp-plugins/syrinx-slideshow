@@ -31,3 +31,6 @@ Please note that this version is still in the works.  I will update this descrip
 
 = 1.0 =
 * First version for wordpress.  Still working on editor functionality with layers.
+
+= 1.0.1 =
+* Fixed bug of raw calls to console.log which failed in IE9 and earlier.
