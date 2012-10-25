@@ -13,6 +13,7 @@ Adds a flexible slideshow with editor and various options.
 Please note that this version is still in the works.  I will update this description when the editor is more complete.
 
 1. [Site](http://wordpress.kusog.org)
+2. [How To Use Guide](http://wordpress.kusog.org/?p=41)
 
 
 == Installation ==
