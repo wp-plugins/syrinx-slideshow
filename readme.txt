@@ -24,6 +24,8 @@ Please note that this version is still in the works.  I will update this descrip
 == Screenshots ==
 
 1. screenshot-1.jpg
+2. screenshot-2.jpg
+3. screenshot-3.jpg
 
 == Changelog ==
 
