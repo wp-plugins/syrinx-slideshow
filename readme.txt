@@ -6,6 +6,7 @@ Tested up to: 3.4
 Stable tag: 1.0.0
 
 Adds a flexible slideshow with editor and various options
+1. [Site] (http://wordpress.kusog.org)
 
 == Description ==
 
@@ -19,4 +20,5 @@ Adds a flexible slideshow with editor and various options
 3. Create slideshows in the new slideshows admin page.
 
 == Screenshots ==
+1. wordpress-slideshow-plugin-editor.jpg
 
