@@ -9,9 +9,10 @@ Adds a flexible slideshow with editor and various options
 
 == Description ==
 
-Adds a flexible slideshow with editor and various options
+Adds a flexible slideshow with editor and various options.  
+Please note that this version is still in the works.  I will update this description when the editor is more complete.
 
-1. [Site] (http://wordpress.kusog.org)
+1. [Site](http://wordpress.kusog.org)
 
 
 == Installation ==
@@ -24,3 +25,7 @@ Adds a flexible slideshow with editor and various options
 
 1. wordpress-slideshow-plugin-editor.jpg
 
+== Changelog ==
+
+= 1.0 =
+* First version for wordpress.  Still working on editor functionality with layers.
