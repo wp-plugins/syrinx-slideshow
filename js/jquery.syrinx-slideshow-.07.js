@@ -30,10 +30,10 @@
         $(window).resize(function () {
             self._resize();
         }).focus(function () {
-            console.log("focus");
+            //console.log("focus");
             self.setIsActive(true);
         }).blur(function () {
-            console.log("blur");
+            //console.log("blur");
             self.setIsActive(false);
         });
 
@@ -190,7 +190,7 @@
                 $layer.show().css(self.getObject($path.data("css" + pos)));
             var nextCss = self.getObject($path.data("css" + (pos + 1)));
             if (nextCss) {
-                console.log("css-top:" + nextCss.top + " - pos:" + pos);
+                //console.log("css-top:" + nextCss.top + " - pos:" + pos);
                 var trans = "";
                 var tstate = null;
                 var x = $layer.animate(nextCss, {
@@ -299,10 +299,10 @@
                     $img.css("top", t3 = Math.round(($innerParent.height() - nh) / 2));
                 if (nw > this.$parent.width())
                     $img.css("left", l3 = Math.round(($innerParent.width() - nw) / 2));
-                console.log("t3=" + t3 + " - l3=" + l3);
+                //console.log("t3=" + t3 + " - l3=" + l3);
             }
             var newSize = { height: Math.round(nh), width: Math.round(nw) };
-            console.log("NewSize: (" + newSize.width + "," + newSize.height + ")");
+            //console.log("NewSize: (" + newSize.width + "," + newSize.height + ")");
             return newSize;
         },
 
