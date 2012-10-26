@@ -4,7 +4,7 @@
 <div class="syx-slideshow-editor">
     <div class="wrap">
 <div id="icon-edit" class="icon32 icon32-posts-post"><br></div>
-<h2>Slideshows <a href="#" class="add-new-h2">Add New</a></h2>
+<h2>Slideshows <a href="#" class="add-new-h2 syx-new-slide">Add New</a></h2>
 </div>
 <div class="tablenav top">
 	<div class="alignleft actions">
@@ -67,4 +67,9 @@
 
 
 <div class="syx-slideplayer"></div>
+</div>
+
+<div class="syx-new-slide-dialog" style="position:absolute;display:none;">
+  <label>New Slide Id:</label>
+  <input type="text" id="syx_new_ssId" />
 </div>

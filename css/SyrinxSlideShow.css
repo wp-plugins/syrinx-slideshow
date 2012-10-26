@@ -60,3 +60,8 @@
         
         /*Admin CSS*/
         .syx-slideshows-ids li.selected {font-weight: bold}
+.syx-new-slide-dialog {
+    position: absolute;
+    width: 300px;
+    height: 150px;
+}

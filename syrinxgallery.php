@@ -39,12 +39,14 @@ function syx_sc_insertSlideShow($attr) {
 }
 
 function syx_save_slideshowx() {
-    $id =  $_POST["id"];
-    $html = $_POST["html"];
-        $html = stripslashes($_POST["html"]);
-    $base = dirname(__FILE__);
-    $fileName = $base.'/slideshows/'.$id.'.html';
-    file_put_contents($fileName, $html);    
+    if(current_user_can("edit_posts")) {
+      $id =  $_POST["id"];
+      $html = $_POST["html"];
+          $html = stripslashes($_POST["html"]);
+      $base = dirname(__FILE__);
+      $fileName = $base.'/slideshows/'.$id.'.html';
+      file_put_contents($fileName, $html);    
+    }
     die();
 }
 
@@ -77,10 +79,6 @@ function syx_createNewSlideShow($ssId) {
     file_put_contents($fileName, preg_replace("/id='_blank'/", "id='$ssId'", file_get_contents($base.'/slideshows/_blank.html')));
 }
 
-function syx_setupAdmin() {
-    my_scripts_method();
-    wp_enqueue_script('syrinxslideshow-wpadmin', plugins_url('/js/syrinx-slideshow-wpadmin.01.js', __FILE__),array('jquery'),'',true);		    
-}
 
 class Syrinx_SlideShow extends WP_Widget {
 
@@ -178,7 +176,7 @@ add_action('wp_ajax_syx_save_slideshow', 'syx_save_slideshowx');
 add_action('wp_ajax_syx_get_slideshow', 'syx_get_slideshow');
 add_action('wp_ajax_nopriv_syx_save_slideshow', 'syx_save_slideshowx');
 
-add_action('admin_menu', 'syx_setupAdmin');
+add_action('admin_enqueue_scripts', 'queue_my_admin_scripts');
 
 add_action('admin_menu', 'register_custom_menu_page');
 
@@ -186,4 +184,30 @@ function register_custom_menu_page() {
    add_menu_page('Site Slideshows', 'Slideshows', 'add_users', 'syrinxgallery/admin-index.php', '',   plugins_url('syrinxgallery/images/icon.png'), 6);
 }
 
+
+function queue_my_admin_scripts() {
+    my_scripts_method();
+    wp_enqueue_script('syrinxslideshow-wpadmin', plugins_url('/js/syrinx-slideshow-wpadmin.01.js', __FILE__),array('jquery','jquery-ui-dialog'),'',true);		    
+    wp_enqueue_style (  'wp-jquery-ui-dialog');
+}
+
+
+function syx_createNew_slideshowx() {
+    if(current_user_can("edit_posts")) {
+      echo "done:".$_POST["ssId"];
+      syx_createNewSlideShow($_POST["ssId"]);
+    }
+    die();
+}
+add_action('wp_ajax_syx_createNew_slideshow','syx_createNew_slideshowx');
+
+function syx_delete_slideshow() {
+    if(current_user_can("edit_posts")) {
+      $base = dirname(__FILE__);
+      $fileName = $base.'/slideshows/'.$_POST["ssId"].'.html';
+      unlink($fileName);
+    }
+    die();
+}
+add_action('wp_ajax_syx_delete_slideshow','syx_delete_slideshow');
 ?>
