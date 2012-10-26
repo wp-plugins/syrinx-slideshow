@@ -1,14 +1,14 @@
 <?php
 /**
  * @package syrinxgallery
- * @version 1.0.3
+ * @version 1.0.4
  */
 /*
 Plugin Name: Syrinx Slideshow Gallery and Editor
 Plugin URI: http://wordpress.kusog.org/?p=12
 Description: The Syrinx Slideshow with multi layer support
 Author: Maryann Denman / Matt Denman
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://wordpress.kusog.org/
 */
 
@@ -86,7 +86,7 @@ class Syrinx_SlideShow extends WP_Widget {
 		// widget actual processes
 		parent::__construct(
 	 		'syrinx_slideshow', // Base ID
-			'Syrinx_SlideShow', // Name
+			'Syrinx Slideshow', // Name
 			array( 'description' => __( 'A multi-layer image slideshow that can be full screen or a small area.', 'text_domain' ), ) // Args
 		);
 	}
@@ -187,6 +187,8 @@ function register_custom_menu_page() {
 
 function queue_my_admin_scripts() {
     my_scripts_method();
+    wp_enqueue_script('media-upload');
+    wp_enqueue_script('thickbox');
     wp_enqueue_script('syrinxslideshow-wpadmin', plugins_url('/js/syrinx-slideshow-wpadmin.01.js', __FILE__),array('jquery','jquery-ui-dialog'),'',true);		    
     wp_enqueue_style (  'wp-jquery-ui-dialog');
 }
