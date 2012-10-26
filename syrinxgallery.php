@@ -181,7 +181,7 @@ add_action('admin_enqueue_scripts', 'queue_my_admin_scripts');
 add_action('admin_menu', 'register_custom_menu_page');
 
 function register_custom_menu_page() {
-   add_menu_page('Site Slideshows', 'Slideshows', 'add_users', 'syrinxgallery/admin-index.php', '',   plugins_url('syrinxgallery/images/icon.png'), 6);
+   add_menu_page('Site Slideshows', 'Slideshows', 'add_users', 'syrinx-slideshow/admin-index.php', '',   plugins_url('syrinx-slideshow/images/icon.png'), 6);
 }
 
 
