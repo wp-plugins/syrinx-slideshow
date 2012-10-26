@@ -13,6 +13,7 @@
     });
 
     var options = {
+        initiallyOpen: false,
         sourcePart: "/Large/",
         replaceSourcePart: "/Sidebar/",
         easing: "swing",
@@ -45,6 +46,8 @@
                 $(".ksg-slide-show").syrinxSlider("sizeupForImage", $(this));
             });
         });
+        if (!options.initiallyOpen)
+            $("#slideout .slideBtn").click();
     }
 
     $("body").on("click", "#slideout .thumbs .thumb", function () {
@@ -56,6 +59,6 @@
     }).on("slider.refresh", ".ksg-slide-show", function () {
         setupThumbs();
     }).on("slider.starting", ".ksg-slide-show", function () {
-        setupThumbs();
+        //setupThumbs();
     });
 })(jQuery);

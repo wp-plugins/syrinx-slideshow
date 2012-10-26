@@ -42,3 +42,6 @@ Please note that this version is still in the works.  I will update this descrip
 
 = 1.0.3 =
 * Fixed issue with slideshow admin menu link being broken
+
+= 1.0.4 =
+* Added new option to jquery control to allow the player controls start off hidden rather than open.
