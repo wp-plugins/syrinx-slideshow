@@ -1,14 +1,14 @@
 <?php
 /**
  * @package syrinxgallery
- * @version 1.0
+ * @version 1.0.3
  */
 /*
 Plugin Name: Syrinx Slideshow Gallery and Editor
 Plugin URI: http://wordpress.kusog.org/?p=12
 Description: The Syrinx Slideshow with multi layer support
 Author: Maryann Denman / Matt Denman
-Version: 1.0
+Version: 1.0.3
 Author URI: http://wordpress.kusog.org/
 */
 
