@@ -35,3 +35,7 @@ Please note that this version is still in the works.  I will update this descrip
 
 = 1.0.1 =
 * Fixed bug of raw calls to console.log which failed in IE9 and earlier.
+
+= 1.0.2 =
+* Fixed the add new button on slideshow admin page so that it really works.  
+* Fixed the delete link for each slideshow in table on admin page so that it really deletes the slideshow.
