@@ -52,3 +52,6 @@ still need to save the edited slideshow in order for the changes to be made for 
 
 = 1.0.6 =
 * Change code so that it uses custom post types rather than flat files for slideshow html. 
+
+= 1.0.7 =
+* Changed code so that if there are slideshow files in the slideshow plugin directory, it would move them to posts and delete the file.

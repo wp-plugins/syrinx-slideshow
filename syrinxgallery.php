@@ -1,14 +1,14 @@
 <?php
 /**
  * @package syrinxgallery
- * @version 1.0.6
+ * @version 1.0.7
  */
 /*
 Plugin Name: Syrinx Slideshow Gallery and Editor
 Plugin URI: http://wordpress.kusog.org/?p=12
 Description: The Syrinx Slideshow with multi layer support
 Author: Maryann Denman / Matt Denman
-Version: 1.0.6
+Version: 1.0.7
 Author URI: http://wordpress.kusog.org/
 */
 
@@ -63,7 +63,7 @@ function syx_getSlideshowsFromPosts() {
     global $wpdb;
     $list = array();
     
-    $posts = get_posts(array( 'post_type' => 'syx_slideshow' ));
+    $posts = get_posts(array( 'post_type' => 'syx_slideshow', 'numberposts' => -1 ));
     foreach( $posts as $post ) {
 		$users = $wpdb->get_results("SELECT display_name FROM $wpdb->users WHERE ID = ".intval($post->post_author) . " LIMIT 1");
 		foreach ($users AS $user)
@@ -294,7 +294,23 @@ function register_custom_menu_page() {
 }
 
 
+function syx_moveFileSlideShowsToPosts() {
+    $files = scandir(dirname(__FILE__).'/slideshows/');
+    foreach($files as $file) {
+        if(preg_match('/(.*?)\.html$/', $file, $matches)) {
+            if($matches[1] != "_blank") {
+                $base = dirname(__FILE__);
+                $fileName = $base.'/slideshows/'.$file;
+                $html = file_get_contents($fileName);                
+                syx_saveSlideShowAsPost($matches[1], $html, true);
+                unlink($fileName);
+            }
+        }
+    }
+}
+
 function queue_my_admin_scripts() {
+    syx_moveFileSlideShowsToPosts();
     my_scripts_method();
     wp_enqueue_script('media-upload');
     wp_enqueue_script('thickbox');
