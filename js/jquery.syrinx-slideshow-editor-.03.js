@@ -1,4 +1,5 @@
 ﻿(function ($) {
+    //Syrinx Slideshow editor jquery plugin
     function SyrinxSlideShowEditor(element, options) {
         var self = this;
         var op = self.options = $.extend({}, self.defaultOptions, options);
@@ -30,25 +31,36 @@
             return this.options;
         },
 
-        setupFilmStrip: function () {
-            var self = this;
-            var $w = this.slideShowEditWin.$;
-            var $ssbody = $w("body");
-            var $horzMove = $w("#horzMove"), $vertMove = $w("#vertMove"), $zoom = $w("#zoom"), $slideImgUrl = $w("#imageUrl");
-            var $slides = $(self.element).find(".ksg-slide");
-            var didDrop = false;
+        _selectedFilmstripEl: function() {
+            return this.$filmstrip.find(".ksg-slide-filmcell.selected");
+        },
+        _filmstripEls: function () {
+            return this.$filmstrip.find(".ksg-slide-filmcell");
+        },
+        _playerSlideEls: function () {
+            return this.$el.find(".ksg-slide");
+        },
 
-            var $editSlides = $ssbody.find(".ksg-slide-filmcell");
+
+        setupFilmStrip: function () {
+            var self = this,
+                $w = this.slideShowEditWin.$,
+                $ssbody = $w("body"),
+                $horzMove = $w("#horzMove"), $vertMove = $w("#vertMove"), $zoom = $w("#zoom"), $slideImgUrl = $w("#imageUrl"),
+                $slides = self._playerSlideEls(),
+                didDrop = false,
+                $editSlides = self._filmstripEls();
+
             self._setupFilmStripCell($editSlides);
             $w("#vertMove, #horzMove, #zoom").change(function (event) {
                 var h = $horzMove.val(), v = $vertMove.val(), z = $zoom.val();
-                $w(".ksg-slide-filmcell.selected").data("origSlideDir",
+                self._selectedFilmstripEl().data("origSlideDir",
                     (h != "none" ? h : "") + " " + (v != "none" ? v : "") + " " + (z != "none" ? z : ""));
                 self._updateSlideShow();
             });
 
             $w("#imageUrl").change(function (event) {
-                $w(".ksg-slide-filmcell.selected").data("imageUrl", $slideImgUrl.val())
+                self._selectedFilmstripEl().data("imageUrl", $slideImgUrl.val())
                     .find("img").attr("src", $slideImgUrl.val()).css({width:"",height:""}).imagesLoaded(function () {
                         self._setupFilmstripImgSizes();
                         self._updateSlideShow();
@@ -57,7 +69,7 @@
         },
 
         _setupFilmStripCell: function($editSlides) {
-            var self = this, $w = self.$w, $ssbody = $w("body"), $slides = self.$el.find(".ksg-slide");
+            var self = this, $w = self.$w, $ssbody = $w("body"), $slides = self._playerSlideEls();
             var $horzMove = $w("#horzMove"), $vertMove = $w("#vertMove"), $zoom = $w("#zoom"), $slideImgUrl = $w("#imageUrl");
 
             function setSelectedCell(filmCell) {
@@ -234,7 +246,7 @@
 
         _slideStripHtml: function () {
             var self = this, options = self.options;
-            var $slides = $(this.element).find(".ksg-slide");
+            var $slides = self._playerSlideEls();
 
             var html = "<div class='ksg-filmstrip-track'>"
                 + "<table cellpadding='0' cellspacing='0' width='100%'><tr><td><div class='ksg-slide-filmstripa'><div class='ksg-slide-filmstripb'><table cellpadding='0' cellspacing='0' class='ksg-filmstrip-corearea'><tr>";
@@ -257,7 +269,7 @@
         _showSlideLayers: function ($slideFilmStrip) {
             var html = "<div class='layer-names'>", self = this;
             if ($slideFilmStrip == null)
-                $slideFilmStrip = self.$w(".ksg-slide-filmcell.selected");
+                $slideFilmStrip = self._selectedFilmstripEl();
 
             var layers = $slideFilmStrip.data("layers");
             for (var pos = 0; pos < layers.length; pos++) {
@@ -277,7 +289,9 @@
             });
         },
 
+        //This is an object to hold functions that know how to convert what is being edited into the type of slideshow to be generated with.
         slideShowContentGenerator: {
+            //This will generate a syrinx slideshow.
             syrinx: function ($ssbody, options) {
                 var self = this;
                 var html = "<div id='"+ self.$el.attr("id") + "' class='ksg-slide-show' style='width:" + $ssbody.find("#ssWidth").val() + "px;height:" + $ssbody.find("#ssHeight").val() + "px;overflow:hidden;background-color:white;' data-slide-options='" +
@@ -306,7 +320,7 @@
                     html += "</div>\n";
                 });
 
-                self.$el.find(".ksg-slide").each(function () {
+                self._playerSlideEls().each(function () {
                     var $slide = $(this);
                     genDiv($slide, ["style"]);
                     genDiv($slide.find(".ksg-slide-image img"), ["style"], "img", true);
@@ -350,8 +364,8 @@
                 self.$el.width($body.find("#ssWidth").val());
                 self.$el.height($body.find("#ssHeight").val());
             }
-            var $slides = $(self.element).find(".ksg-slide").remove();
-            $body.find(".ksg-slide-filmcell").each(function (index) {
+            var $slides = self._playerSlideEls().remove();
+            self._filmstripEls().each(function (index) {
                 var origIndex = $w(this).data("origIndex"), $slide;
                 if (origIndex < 0) {
                 }
@@ -396,8 +410,8 @@
         },
 
         _setupFilmstripImgSizes: function () {
-            var self = this, $w = self.$w, $ssbody = $w(self.slideShowEditWin.document.body);
-            $ssbody.find(".ksg-slide-filmcell img").each(function () {
+            var self = this, $w = self.$w;
+            self.$filmstrip.find(".ksg-slide-filmcell img").each(function () {
                 if($w(this).attr("src").indexOf(self.options.slideStripSizePart) == -1)
                     self.$el.syrinxSlider("sizeupForImage", $w(this));
             });
@@ -409,12 +423,19 @@
                         "<div class='ksg-slide-image' style='position: absolute;'>" +
                             "<img src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='/>" +
                         "</div></div>";
-            var index = self.$el.find(".ksg-slide").length;
+            var index = self._playerSlideEls().length;
             var $slide = $(html).appendTo(self.$el);
             self._setupFilmStripCell($w(self._slideStripCellHtml($slide, index)).appendTo(".ksg-filmstrip-corearea tr").find(".ksg-slide-filmcell"));
             self._setupFilmstripImgSizes();
             self.$el.syrinxSlider("refresh");
             //self._updateSlideShow();
+        },
+
+        _deleteSlide: function () {
+            this._selectedFilmstripEl().remove();
+            this._updateSlideShow();
+            if(this._playerSlideEls().length != 0)
+                this.$el.syrinxSlider("moveNext");
         },
 
         blankImgUrl: function() {
@@ -455,6 +476,7 @@
                     $w("#pause").toggle();
                 }
 
+                self.$filmstrip = $ssbody.find(".ksg-filmstrip-track");
                 self._setupFilmstripImgSizes();
 
                 $ssbody.on("click", "#save", function () {
@@ -462,7 +484,7 @@
                 }).on("click", "#createSlide", function () {
                     self._createNewSlide();
                 }).on("click", "#deleteSlide", function () {
-
+                    self._deleteSlide();
                 }).on("click", "#play", function () {
                     self.$el.syrinxSlider("play");
                     togglePlayPause();

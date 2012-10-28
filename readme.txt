@@ -45,3 +45,7 @@ Please note that this version is still in the works.  I will update this descrip
 
 = 1.0.4 =
 * Added new option to jquery control to allow the player controls start off hidden rather than open.
+
+= 1.0.5 =
+* Finished the delete slide support in editor.  You can now properly select a slide and then delete it.  Of course you
+still need to save the edited slideshow in order for the changes to be made for good and visible to the other users of the site.
