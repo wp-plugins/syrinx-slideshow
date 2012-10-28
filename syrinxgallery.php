@@ -1,14 +1,14 @@
 <?php
 /**
  * @package syrinxgallery
- * @version 1.0.7
+ * @version 1.0.8
  */
 /*
 Plugin Name: Syrinx Slideshow Gallery and Editor
 Plugin URI: http://wordpress.kusog.org/?p=12
 Description: The Syrinx Slideshow provides 3 powerful jQuery plugins for playing, controlling, and editing slideshows with multiple options for how slideshows can be displayed in a WordPress site.  Each slide background image can pan & zoom while having multiple animated layers displaying over it it.  Powerful editor allows for finetune, multi keyframe animation definitions with amazing results.
 Author: Maryann Denman / Matt Denman
-Version: 1.0.7
+Version: 1.0.8
 Author URI: http://wordpress.kusog.org/
 */
 
@@ -27,15 +27,10 @@ function my_scripts_method() {
 
 function syx_saveSlideShowAsPost($id, $html, $asPage) {
     global $wpdb;
+    global $current_user;
+    get_currentuserinfo();
+
     if($asPage == true) {
-		$author_id = 1; // Default admin user_id
-		// Check user input
-		$user_query = "SELECT ID, user_login, display_name, user_email FROM $wpdb->users WHERE ID = ".intval($_POST['author_id']) . " LIMIT 1";
-		$users = $wpdb->get_results($user_query);
-		foreach ($users AS $row) {
-			// User found, replace value of $author
-			$author_id = $row->ID;
-		}
 
         $post = array ();
 
@@ -46,7 +41,7 @@ function syx_saveSlideShowAsPost($id, $html, $asPage) {
         $post['post_type'] = 'syx_slideshow';
         $post['post_content'] = $html;
         $post['post_status'] = 'publish';
-        $post['post_author'] = $author_id;
+        $post['post_author'] = $current_user->ID;
 
         if ( $postId ) {
             $post['ID'] = $postId;

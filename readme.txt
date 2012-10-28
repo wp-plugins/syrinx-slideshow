@@ -59,3 +59,6 @@ and upgrade and copy the files from that folder back afterwards.
 * Changed code so that if there are slideshow files in the slideshow plugin directory, it would move them to posts and delete the file.
 * If you created content with post 1.0.6 versions, this version can take the files in the slideshows directory and move them into posts in
 the wordpress db.  
+
+= 1.0.8 =
+*Fixed code to properly set author id of new post to user doing the work - was still hard coded to admin.
