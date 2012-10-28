@@ -6,7 +6,7 @@
 /*
 Plugin Name: Syrinx Slideshow Gallery and Editor
 Plugin URI: http://wordpress.kusog.org/?p=12
-Description: The Syrinx Slideshow with multi layer support
+Description: The Syrinx Slideshow provides 3 powerful jQuery plugins for playing, controlling, and editing slideshows with multiple options for how slideshows can be displayed in a WordPress site.  Each slide background image can pan & zoom while having multiple animated layers displaying over it it.  Powerful editor allows for finetune, multi keyframe animation definitions with amazing results.
 Author: Maryann Denman / Matt Denman
 Version: 1.0.7
 Author URI: http://wordpress.kusog.org/
