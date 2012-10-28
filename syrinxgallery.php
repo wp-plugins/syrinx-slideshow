@@ -1,16 +1,20 @@
 <?php
 /**
  * @package syrinxgallery
- * @version 1.0.5
+ * @version 1.0.6
  */
 /*
 Plugin Name: Syrinx Slideshow Gallery and Editor
 Plugin URI: http://wordpress.kusog.org/?p=12
 Description: The Syrinx Slideshow with multi layer support
 Author: Maryann Denman / Matt Denman
-Version: 1.0.5
+Version: 1.0.6
 Author URI: http://wordpress.kusog.org/
 */
+
+
+$syx_usePageForSlideshow = true;
+$postTitlePrefix = 'Slideshow - ';
 
 function my_scripts_method() {
     wp_enqueue_script( 'jquery' );
@@ -21,14 +25,78 @@ function my_scripts_method() {
     wp_enqueue_script('syrinxslideshow-editor', plugins_url('/js/jquery.syrinx-slideshow-editor-.03.js', __FILE__),array('jquery'),'',true);		
 }    
 
+function syx_saveSlideShowAsPost($id, $html, $asPage) {
+    global $wpdb;
+    if($asPage == true) {
+		$author_id = 1; // Default admin user_id
+		// Check user input
+		$user_query = "SELECT ID, user_login, display_name, user_email FROM $wpdb->users WHERE ID = ".intval($_POST['author_id']) . " LIMIT 1";
+		$users = $wpdb->get_results($user_query);
+		foreach ($users AS $row) {
+			// User found, replace value of $author
+			$author_id = $row->ID;
+		}
+
+        $post = array ();
+
+        $postId = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type='syx_slideshow'", $id ));
+
+        // Create post object
+        $post['post_title'] = $postTitlePrefix.$id;
+        $post['post_type'] = 'syx_slideshow';
+        $post['post_content'] = $html;
+        $post['post_status'] = 'publish';
+        $post['post_author'] = $author_id;
+
+        if ( $postId ) {
+            $post['ID'] = $postId;
+            wp_update_post($post);
+        }
+        else {        
+            // Insert the post into the database
+            wp_insert_post($post);
+        }
+    }
+}
+
+function syx_getSlideshowsFromPosts() {
+    global $wpdb;
+    $list = array();
+    
+    $posts = get_posts(array( 'post_type' => 'syx_slideshow' ));
+    foreach( $posts as $post ) {
+		$users = $wpdb->get_results("SELECT display_name FROM $wpdb->users WHERE ID = ".intval($post->post_author) . " LIMIT 1");
+		foreach ($users AS $user)
+            array_push($list, array('id' => $post->post_title, 'title' => $post->post_title, 'author' => $user->display_name, 'date' => $post->post_date, 'html' => $post->post_content));
+    }
+
+    return $list;
+}
+
+
+add_action( 'init', 'create_post_type' );
+function create_post_type() {
+	register_post_type( 'syx_slideshow',
+		array(
+			'labels' => array(
+				'name' => __( 'Syrinx Slideshow' ),
+				'singular_name' => __( 'Slideshows' )
+			),
+		'public' => true,
+		'has_archive' => true,
+		)
+	);
+}
+
+
          
 function syx_sc_insertSlideShow($attr) {
+    global $syx_usePageForSlideshow;
     $id = $attr["id"];
-    $base = dirname(__FILE__);
-    $fileName = $base.'/slideshows/'.$id.'.html';
-    $html = file_get_contents($fileName).'<script>jQuery(function() {jQuery("#'.$id.'").syrinxSlider()';
-   if(current_user_can("edit_posts")) {
-    $html .= '.syrinxSlideShowEditor();';
+    $html = syx_get_slideshowI($id).'<script>jQuery(function() {jQuery("#'.$id.'").syrinxSlider()';
+    
+    if(current_user_can("edit_posts")) {
+        $html .= '.syrinxSlideShowEditor();';
     }
     else {
         $html .= ';';
@@ -39,13 +107,20 @@ function syx_sc_insertSlideShow($attr) {
 }
 
 function syx_save_slideshowx() {
+    global $syx_usePageForSlideshow;
     if(current_user_can("edit_posts")) {
-      $id =  $_POST["id"];
-      $html = $_POST["html"];
-          $html = stripslashes($_POST["html"]);
-      $base = dirname(__FILE__);
-      $fileName = $base.'/slideshows/'.$id.'.html';
-      file_put_contents($fileName, $html);    
+        $id =  $_POST["id"];
+        $html = $_POST["html"];
+        $html = stripslashes($_POST["html"]);
+
+        if($syx_usePageForSlideshow) {
+            syx_saveSlideShowAsPost($id, $html, true);
+        }
+        else {
+            $base = dirname(__FILE__);
+            $fileName = $base.'/slideshows/'.$id.'.html';
+            file_put_contents($fileName, $html);    
+        }
     }
     die();
 }
@@ -55,28 +130,64 @@ function syx_get_slideshow() {
     die();
 }
 function syx_get_slideshowI($id) {
-    $base = dirname(__FILE__);
-    $fileName = $base.'/slideshows/'.$id.'.html';
-    $html = file_get_contents($fileName);
+    global $syx_usePageForSlideshow;
+    global $wpdb;
+    $html = '';
+    
+    if($syx_usePageForSlideshow) {
+        $postId = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type='syx_slideshow'", $id ));
+        if ( $postId ) {
+            $post = get_post($postId);
+            $html = $post->post_content;            
+        }
+        echo "<!-- getting slideshow from post";
+        echo $html;
+        echo "-->";
+    }
+    else {
+        $base = dirname(__FILE__);
+        $fileName = $base.'/slideshows/'.$id.'.html';
+        $html = file_get_contents($fileName);
+        echo "<!-- getting slideshow from file -->";
+    }
+
     return $html;
  }
 
 function syx_getExistingSlideShowIds() {
-    $list = array();
-    $files = scandir(dirname(__FILE__).'/slideshows/');
-    foreach($files as $file) {
-        if(preg_match('/(.*?)\.html$/', $file, $matches)) {
-            if($matches[1] != "_blank")
-                array_push($list, $matches[1]);
-        }
+    global $syx_usePageForSlideshow;
+    if($syx_usePageForSlideshow == true) {
+        return syx_getSlideshowsFromPosts();
     }
-    return $list;
+    else {
+        $list = array();
+        $files = scandir(dirname(__FILE__).'/slideshows/');
+        foreach($files as $file) {
+            if(preg_match('/(.*?)\.html$/', $file, $matches)) {
+                if($matches[1] != "_blank")
+                    array_push($list, $matches[1]);
+            }
+        }
+        
+        return $list;
+    }
 }
 
 function syx_createNewSlideShow($ssId) {
+    global $syx_usePageForSlideshow;
+
     $base = dirname(__FILE__);
     $fileName = $base.'/slideshows/'.$ssId.'.html';
-    file_put_contents($fileName, preg_replace("/id='_blank'/", "id='$ssId'", file_get_contents($base.'/slideshows/_blank.html')));
+    $blank = preg_replace("/id='_blank'/", "id='$ssId'", file_get_contents($base.'/slideshows/_blank.html'));
+        
+    if($syx_usePageForSlideshow == true) {
+        syx_saveSlideShowAsPost($ssId, $blank, true);
+    }
+    else {
+        $base = dirname(__FILE__);
+        $fileName = $base.'/slideshows/'.$ssId.'.html';
+        file_put_contents($fileName, $blank);
+    }
 }
 
 
@@ -107,11 +218,11 @@ class Syrinx_SlideShow extends WP_Widget {
             <option value="_CreateNew_">Create New...</option>
 		<?php 
             $list = syx_getExistingSlideShowIds();
-            foreach($list as $name) {
-                echo '<option';
-                if($name == $ssId)
+            foreach($list as $sshow) {
+                echo '<option value="' . $sshow['id'] . '" ';
+                if($sshow['id'] == $ssId)
                     echo ' selected="selected"';
-                echo '>'.$name.'</option>';
+                echo '>'.$sshow['title'].'</option>';
             }
         ?>
         </select>
@@ -148,10 +259,8 @@ class Syrinx_SlideShow extends WP_Widget {
 
 		echo $before_widget;
 
-        $base = dirname(__FILE__);
-        $fileName = $base.'/slideshows/'.$ssId.'.html';
-
-        $html = file_get_contents($fileName).'<script>jQuery(function() {jQuery("#'.$ssId.'").syrinxSlider()';
+        
+        $html = syx_get_slideshowI($ssId).'<script>jQuery(function() {jQuery("#'.$ssId.'").syrinxSlider()';
         if(current_user_can("edit_posts")) {
         $html .= '.syrinxSlideShowEditor();';
         }
@@ -204,10 +313,19 @@ function syx_createNew_slideshowx() {
 add_action('wp_ajax_syx_createNew_slideshow','syx_createNew_slideshowx');
 
 function syx_delete_slideshow() {
-    if(current_user_can("edit_posts")) {
-      $base = dirname(__FILE__);
-      $fileName = $base.'/slideshows/'.$_POST["ssId"].'.html';
-      unlink($fileName);
+    global $wpdb;
+    global $syx_usePageForSlideshow;
+
+    if(current_user_can("edit_posts")) {    
+        if($syx_usePageForSlideshow) {            
+            $postId = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type='syx_slideshow'", $_POST["ssId"] ));
+            wp_delete_post($postId);
+        }
+        else {
+            $base = dirname(__FILE__);
+            $fileName = $base.'/slideshows/'.$_POST["ssId"].'.html';
+            unlink($fileName);
+        }
     }
     die();
 }

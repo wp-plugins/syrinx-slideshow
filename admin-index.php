@@ -29,19 +29,18 @@
 	<tbody id="the-list">
     <?php
             $list = syx_getExistingSlideShowIds();
-            foreach($list as $name) {
-                $html = syx_get_slideshowI($name);
-                preg_match('/<img src="([^"]*)"/', $html, $matches);
+            foreach($list as $sshow) {
+                preg_match('/<img src="([^"]*)"/', $sshow['html'], $matches);
                 $firstImg = $matches[1];
-                $numSlides = preg_match_all('/ksg-slide["\'\w]/', $html, $matches);
+                $numSlides = preg_match_all('/ksg-slide["\'\w]/', $sshow['html'], $matches);
                 //$numSlides = sizeof($matches);
                 
     ?>
-    	<tr id="post-10" class="alternate author-self status-inherit" valign="top" data-slideshow-id="<?php echo $name;?>">
+    	<tr id="post-10" class="alternate author-self status-inherit" valign="top" data-slideshow-id="<?php echo $sshow['id'];?>">
 		    <th scope="row" class="check-column"><input type="checkbox" name="media[]" value="10"></th>
-		    <td class="column-icon media-icon"><a href="#" class="syx-view" title="Edit “<?php echo $name;?>”"><img width="60" src="<?php echo $firstImg;?>" class="attachment-80x60" alt="<?php echo $name;?>" title="<?php echo $name;?>"></a></td>
+		    <td class="column-icon media-icon"><a href="#" class="syx-view" title="Edit “<?php echo $sshow['id'];?>”"><img width="60" src="<?php echo $firstImg;?>" class="attachment-80x60" alt="<?php echo $sshow['id'];?>" title="<?php echo $sshow['id'];?>"></a></td>
             <td class="title column-title">
-                <strong><a href="#" class="syx-view" title="Edit “<?php echo $name;?>”"><?php echo $name;?></a></strong>
+                <strong><a href="#" class="syx-view" title="Edit “<?php echo $name;?>”"><?php echo $sshow['id'];?></a></strong>
                 <p><?php echo $numSlides;?> slides</p>
                 <div class="row-actions">
                     <span class="edit"><a class="syx-view" href="#">Edit</a> | </span>
@@ -49,14 +48,14 @@
                     <span class="view"><a href="#" title="View “Setup of WordPress site complete”" rel="permalink">View</a></span>
                 </div>
             </td>
-		    <td class="author column-author">admin</td>
+		    <td class="author column-author"><?php echo $sshow['author']; ?></td>
             <!--
 			<td class="parent column-parent"><strong><a href="#"></td>
 		    <td class="comments column-comments num">
 			    <div class="post-com-count-wrapper"><a href="#" title="0 pending" class="post-com-count"><span class="comment-count">0</span></a></div>
 		    </td>
             -->
-		    <td class="date column-date">7 hours ago</td>
+		    <td class="date column-date"><?php echo $sshow['date']; ?></td>
 	    </tr>
     <?php
         }        
