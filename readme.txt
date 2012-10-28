@@ -51,7 +51,11 @@ Please note that this version is still in the works.  I will update this descrip
 still need to save the edited slideshow in order for the changes to be made for good and visible to the other users of the site.
 
 = 1.0.6 =
-* Change code so that it uses custom post types rather than flat files for slideshow html. 
+* Change code so that it uses custom post types rather than flat files for slideshow html. Note that upgrading to this version will remove any custom
+slideshows created that were stored in the plugins/syrinx-slideshow/slideshows directory.  It is important to copy that folder someplace
+and upgrade and copy the files from that folder back afterwards.
 
 = 1.0.7 =
 * Changed code so that if there are slideshow files in the slideshow plugin directory, it would move them to posts and delete the file.
+* If you created content with post 1.0.6 versions, this version can take the files in the slideshows directory and move them into posts in
+the wordpress db.  
