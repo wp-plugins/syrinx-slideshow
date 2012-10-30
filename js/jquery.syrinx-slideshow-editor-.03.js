@@ -324,9 +324,17 @@
                     var $slide = $(this);
                     genDiv($slide, ["style"]);
                     genDiv($slide.find(".ksg-slide-image img"), ["style"], "img", true);
-                    $slide.find(".ksg-slide-layer:not(.ksg-layer-clone)").each(function () {
+                    var $clones = $slide.find(".ksg-slide-layer.ksg-layer-clone");
+                    $slide.find(".ksg-slide-layer:not(.ksg-layer-clone)").each(function (index) {
+                        $(this).removeClass("inedit");
                         genDiv($(this), ["style"]);
-                        html += $(this).html() +
+                        var layerHtml = $(this).html();
+                        //if ($(this).data("clone"))
+                        //    layerHtml = $(this).data("clone").html();
+                        var $clone = $clones.eq(index);
+                        if ($clone.length)
+                            layerHtml = $clone.html();
+                        html += layerHtml +
                             "</div>";
                     });
 
@@ -441,6 +449,18 @@
         blankImgUrl: function() {
         },
 
+        setupActiveLayer: function (index) {
+            var self = this,
+                $slide = self.$el.syrinxSlider("getCurrentSlide");
+            self.activeLayer = index;
+
+            $slide.find(".ksg-slide-layer").removeClass("inedit").attr("contentEditable", false);
+            var $clone = $slide.find(".ksg-slide-layer.ksg-layer-clone").eq(index).addClass("inedit");
+            $layer = $slide.find(".ksg-slide-layer:not(.ksg-layer-clone)").eq(index).data("clone", $clone);
+            if ($clone)
+                $clone.addClass("inedit").attr("contentEditable", true);
+        },
+
         editSlideShow: function () {
             var self = this;
             this.slideShowEditWin = window.open("", "ksgSlideShowEditor", "width=540, height=700, resizable=1");
@@ -535,10 +555,11 @@
                         updateSlideShow();
                     }
                 }).on("focusin", ".layer-name", function (event) {
-                    self.activeLayer = $w(this).data("origIndex");
+                    self.setupActiveLayer($w(this).data("origIndex"));
                     $w(".layer-keyframes").each(function () {
                         $(this).syrinxKeyFrameTimeline("selectTimeline", self.activeLayer);
                     });
+
                 }).on("change", "#slideshowDetails input:checkbox", function () {
                     updateSlideShow();
                 }).on("focusout", "#slideshowDetails input:text, #slideDetails", function () {
@@ -551,9 +572,15 @@
                     layer.title = $w(this).val();
                     updateSlideShow();
                 }).on("timeline.layerSelected", function (event, index) {
-                    self.activeLayer = index;
+                    self.setupActiveLayer(index);                    
                 }).on("timeline.keyframeSelect", function (event, index, keyframe) {
                     self._displayKeyframeDetails(index, keyframe);
+
+                    var $slide = self.$el.syrinxSlider("getCurrentSlide"),
+                        $clone = $slide.find(".ksg-slide-layer.ksg-layer-clone.inedit");//,
+                        //$clone = $layer.data("clone");
+
+                    $clone.show().css(eval("(" + keyframe.css + ")"));
                 }).on("focusout", "#keyframeCss", function (event) {
                     self.activeKeyframe.css = $(this).val();
                     updateSlideShow();
@@ -635,6 +662,7 @@
 
                 self.$el.find(".keyframe").removeClass("selected");
                 $keyframe.addClass("selected");
+                self._setSelectedLayer($keyframe.parent());
                 self.$el.trigger("timeline.keyframeSelect", [kpos, self.selectedKeyframe]);
             }
 
@@ -677,9 +705,7 @@
             }).on("click", ".keyframe", function (event) {
                 setKeyframeSelected($(this));
             }).on("click", ".timeline-box", function () {
-                self.$el.find(".timeline-box").removeClass("selected");
-                $(this).addClass("selected");
-                self.$el.trigger("timeline.layerSelected", $(this).data("origIndex"));
+                self._setSelectedLayer($(this));
             });
 
             self._setupTimeRuler();
@@ -702,6 +728,14 @@
                     $(this).css("left", posPercent + "%").attr("title", newTime);
                 }
             });
+        },
+
+        _setSelectedLayer: function ($layer) {
+            if (!$layer.hasClass("selected")) {
+                this.$el.find(".timeline-box").removeClass("selected");
+                $layer.addClass("selected");
+                this.$el.trigger("timeline.layerSelected", $layer.data("origIndex"));
+            }
         },
 
         selectTimeline: function(index) {

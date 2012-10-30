@@ -61,4 +61,9 @@ and upgrade and copy the files from that folder back afterwards.
 the wordpress db.  
 
 = 1.0.8 =
-*Fixed code to properly set author id of new post to user doing the work - was still hard coded to admin.
+* Fixed code to properly set author id of new post to user doing the work - was still hard coded to admin.
+
+= 1.0.9 =
+* Added keframe selection and direct editing of layer content within slideshow area when in edit mode.  Note that the slideshow doesn't pause
+automatically when selecting keframes in the editor.  It is easier to edit layers when they are not moving, so use the pause/play button to stop the slideshow
+before editing.

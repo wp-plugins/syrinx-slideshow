@@ -124,6 +124,10 @@
             return $slide;
         },
 
+        getCurrentSlide: function () {
+            return this.$currentSlide;
+        },
+
         _resize: function () {
             var self = this;
             if (self.options.sizeToWindow == true) {
@@ -160,7 +164,9 @@
             for (var i in this.slideTimers)
                 clearTimeout(this.slideTimers[i]);
             this.slideTimers = [];
-            $slide.find(".ksg-slide-layer").stop().hide();
+            $slide.find(".ksg-slide-layer").stop().hide().each(function () {
+                $(this).data("clone", null);
+            });
             $slide.find(".ksg-layer-clone").remove();
         },
 
@@ -171,7 +177,9 @@
                 if(timeout == null)
                     timeout = 0;
                 self.slideTimers.push(setTimeout(function () {
-                    self.animateNextLayerCss($(layer).clone(true).addClass("ksg-layer-clone").insertAfter($(layer)), 1);
+                    var $clone = $(layer).clone(true);
+                    $(layer).data("clone", $clone);
+                    self.animateNextLayerCss($clone.addClass("ksg-layer-clone").insertAfter($(layer)), 1);
                 }, timeout));
             });
         },
@@ -180,6 +188,9 @@
             var self = this, $path = self.$parent.find("." + $layer.data("layerPath"));
             if ($path.length == 0)
                 $path = $layer;
+
+            if (self.isPaused)
+                return;
 
             var layerDelay = $path.data("delay" + (lastPos?lastPos:pos));
             layertDelay = layerDelay == null ? 0 : parseInt(layerDelay);
