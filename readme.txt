@@ -65,5 +65,5 @@ the wordpress db.
 
 = 1.0.9 =
 * Added keframe selection and direct editing of layer content within slideshow area when in edit mode.  Note that the slideshow doesn't pause
-automatically when selecting keframes in the editor.  It is easier to edit layers when they are not moving, so use the pause/play button to stop the slideshow
+automatically when selecting keframes in the editor.  It is easier to edit layers when they are not moving, so use the pause play button to stop the slideshow
 before editing.
