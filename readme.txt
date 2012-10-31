@@ -67,3 +67,15 @@ the wordpress db.
 * Added keframe selection and direct editing of layer content within slideshow area when in edit mode.  Note that the slideshow doesn't pause
 automatically when selecting keframes in the editor.  It is easier to edit layers when they are not moving, so use the pause play button to stop the slideshow
 before editing.
+
+= 1.0.10 =
+* This gives a good view into how editing within the popup slideshow editor window will work.  It is now possible to create a new slide, add a new layer, edit the
+content within the layer, add multiple keyframes on the timeline, and then save properly.
+* End to End editing of slide, layers, and keyframes popup slideshow editor window is mostly working.  There are still known issues such as deleting keyframes
+and there is also a limited set of editing options in the layer at this moment.
+* When editing a layer's keyframe animation css, you should check the "Loop" checkbox and also click the "Pause" button, which once paused will have its text change to "Play".
+* You can add any css attribute in the well formatted jQuery style css object.
+* When you click on a keyframe that lets you see the layer in the slideshow area, you can edit the content in the player within the dashed area.
+* Another known issue is that you cannot drag the layer in the layer to set top/left css attributes.  This will be working in near future drop.  As well as using jQuery UI
+resize plugin to allow the layer to be resized to the desired width/height.
+* Look for future versions to have far more advanced layer content editing options, such as inserting images, videos, post content, etc.

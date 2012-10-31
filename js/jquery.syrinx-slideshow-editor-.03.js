@@ -266,6 +266,18 @@
             "</div></td>";
         },
 
+        _newLayerHtml: function (layer) {
+            var title = layer.title,
+                css1 = layer.keyFrames[0].css,
+                initStyle = 'style="position: absolute; display: none;"',
+                animiTime = 2000;
+
+            return "<div class='ksg-slide-layer' data-layer-title='" + title + "' " + initStyle + 
+                    " data-fade-out='False' data-delay='0' data-css1=\"" + css1 + "\" data-animi-time1='" + animiTime + "'>" +
+                        "New Layer Content" +
+                   "</div>";
+        },
+
         _showSlideLayers: function ($slideFilmStrip) {
             var html = "<div class='layer-names'>", self = this;
             if ($slideFilmStrip == null)
@@ -298,7 +310,8 @@
                     JSON.stringify(options) +
                     "'>\n";
 
-                function genDiv($el, skipAttributes, tag, closed) {
+                function genDiv($el, dataIdChecks, skipAttributes, tag, closed) {
+                    var foundData = {};
                     if (!tag)
                         tag = "div";
                     html += "<" + tag;
@@ -306,11 +319,24 @@
                         attr = attrs.item(i);
                         if (!skipAttributes || $.inArray(attr.nodeName, skipAttributes)) {
                             html += " " + attr.nodeName + "=\"";
-                            if (attr.nodeName.indexOf("data-") == 0)
-                                html += $el.data(attr.nodeName.substr(5));
+                            if (attr.nodeName.indexOf("data-") == 0) {
+                                var subName = attr.nodeName.substr(5);
+                                foundData[subName] = true;
+                                html += $el.data(subName);
+                            }
                             else
                                 html += attr.nodeValue;
                             html += "\"";
+                        }
+                    }
+                    if (dataIdChecks && dataIdChecks.length > 0) {
+                        for (var i = 0; i < dataIdChecks.length; i++) {
+                            if (foundData[dataIdChecks[i]] != true) {
+                                var val = $el.data(dataIdChecks[i]);
+                                if (val) {
+                                    html += " data-" + dataIdChecks[i] + "=\"" + val + "\"";
+                                }
+                            }
                         }
                     }
                     html += (closed?"/":"") + ">";
@@ -322,12 +348,19 @@
 
                 self._playerSlideEls().each(function () {
                     var $slide = $(this);
-                    genDiv($slide, ["style"]);
-                    genDiv($slide.find(".ksg-slide-image img"), ["style"], "img", true);
+                    genDiv($slide, [], ["style"]);
+                    genDiv($slide.find(".ksg-slide-image img"), [], ["style"], "img", true);
                     var $clones = $slide.find(".ksg-slide-layer.ksg-layer-clone");
                     $slide.find(".ksg-slide-layer:not(.ksg-layer-clone)").each(function (index) {
                         $(this).removeClass("inedit");
-                        genDiv($(this), ["style"]);
+                        //TODO: Move the looping logic to genDiv where it can stop if it sees an index doesn't exist. 
+                        //This is a crappy hack to get things in motion. Limits # of keyframes to 100 for now.
+                        var items = [];
+                        for (var xx = 1; xx <= 100; xx++) {
+                            items.push("css" + xx, "animi-time"+xx);
+                        }
+
+                        genDiv($(this), items, ["style"]);
                         var layerHtml = $(this).html();
                         //if ($(this).data("clone"))
                         //    layerHtml = $(this).data("clone").html();
@@ -390,8 +423,18 @@
                     for (var lpos = 0; lpos < layers.length; lpos++) {
                         var layer = layers[lpos];
                         if (layer.path == null) {
-                            var baseTime = 0, $layer = null;
-                            var $layer = $slide.find(".ksg-slide-layer:not(.ksg-layer-clone)").eq(layer.origIndex);
+                            var baseTime = 0, $layer = null,
+                                $layerEls = $slide.find(".ksg-slide-layer:not(.ksg-layer-clone)");
+
+                            if (layer.origIndex < 0) {
+                                //TODO:Refactor a new method in slideshow JS as this is a rip of it a bit too - when creating clone for animation changes.
+                                var $nle = $(self._newLayerHtml(layer)).appendTo($slide);
+                                var $clone = $nle.clone(true).addClass("ksg-layer-clone").insertAfter($nle);
+                                $nle.data("clone", $clone);
+                                layer.origIndex = $layerEls.length;
+                            }
+
+                            var $layer = $layerEls.eq(layer.origIndex);
                             $layer.data("layerTitle", layer.title);
                             for (var kpos = 0; kpos < layer.keyFrames.length; kpos++) {
                                 var keyframe = layer.keyFrames[kpos];
@@ -444,6 +487,22 @@
             this._updateSlideShow();
             if(this._playerSlideEls().length != 0)
                 this.$el.syrinxSlider("moveNext");
+        },
+
+        _newKeyframe: function (cloneSelected) {
+            var self = this;
+            if (self.activeLayer != null) {
+                var $filmSlide = self.$w(".ksg-slide-filmcell.selected"),
+                    layers = $filmSlide.data("layers");
+                var keyframes = layers[self.activeLayer].keyFrames;
+                keyframes.splice(cloneSelected?self.activeKeyframeIndex:0, 0, $.extend(true, {}, cloneSelected ? self.activeKeyframe : {
+                    time: 0,
+                    css: "{top:'0px',left:'0px',width:'100px',height:'100px'}"
+                }));
+                for (var pos = 0; pos < keyframes.length; pos++)
+                    keyframes[pos].origIndex = pos;
+                self._showSlideLayers($filmSlide);
+            }
         },
 
         blankImgUrl: function() {
@@ -517,9 +576,13 @@
                     var $filmSlide = $w(".ksg-slide-filmcell.selected"),
                         layers = $filmSlide.data("layers");
                     layers.push({
-                        title: "",
+                        title: "new layer",
                         origIndex: -1,
-                        keyFrames: []
+                        keyFrames: [{
+                            time: 0,
+                            css: "{'top': '0px', 'left': '0px', 'width': '100px', 'height': '100px', opacity:'1'}",
+                            origIndex: 0
+                        }]
                     });
                     self.activeLayer = null;
                     self._showSlideLayers($filmSlide);
@@ -533,17 +596,12 @@
                         self.activeLayer = null;
                         updateSlideShow();
                     }
+                }).on("click", "#newKeyframe", function () {
+                    self._newKeyframe(false);
+                    updateSlideShow();
                 }).on("click", "#cloneKeyframe", function () {
-                    if (self.activeLayer != null) {
-                        var $filmSlide = self.$w(".ksg-slide-filmcell.selected"),
-                            layers = $filmSlide.data("layers");
-                        var keyframes = layers[self.activeLayer].keyFrames;
-                        keyframes.splice(self.activeKeyframeIndex, 0, $.extend(true, {}, self.activeKeyframe));
-                        for (var pos = 0; pos < keyframes.length; pos++)
-                            keyframes[pos].origIndex = pos;
-                        self._showSlideLayers($filmSlide);
-                        updateSlideShow();
-                    }
+                    self._newKeyframe(true);
+                    updateSlideShow();
                 }).on("click", "#deleteKeyframe", function () {
                     if (self.activeKeyframe) {
                         var $filmSlide = self.$w(".ksg-slide-filmcell.selected"),
@@ -573,7 +631,7 @@
                     updateSlideShow();
                 }).on("timeline.layerSelected", function (event, index) {
                     self.setupActiveLayer(index);                    
-                }).on("timeline.keyframeSelect", function (event, index, keyframe) {
+                }).on("timeline.keyframeSelect", function (event, index, keyframe, isUpdate) {
                     self._displayKeyframeDetails(index, keyframe);
 
                     var $slide = self.$el.syrinxSlider("getCurrentSlide"),
@@ -581,6 +639,8 @@
                         //$clone = $layer.data("clone");
 
                     $clone.show().css(eval("(" + keyframe.css + ")"));
+                    if (isUpdate)
+                        updateSlideShow();
                 }).on("focusout", "#keyframeCss", function (event) {
                     self.activeKeyframe.css = $(this).val();
                     updateSlideShow();
@@ -651,7 +711,7 @@
             function calcKeyframeLeft(time) {
                 return (time * 100) / self.maxTime;
             }
-            function setKeyframeSelected($keyframe) {
+            function setKeyframeSelected($keyframe, isUpdate) {
                 var keyframes = self.options.timelines[$keyframe.data("timelineIndex")].keyFrames;
                 var kpos = 0;
                 for(; kpos < keyframes.length; kpos++)
@@ -663,7 +723,8 @@
                 self.$el.find(".keyframe").removeClass("selected");
                 $keyframe.addClass("selected");
                 self._setSelectedLayer($keyframe.parent());
-                self.$el.trigger("timeline.keyframeSelect", [kpos, self.selectedKeyframe]);
+
+                self.$el.trigger("timeline.keyframeSelect", [kpos, self.selectedKeyframe, isUpdate==true]);
             }
 
             function sortKeyframesByTime(timeline) {
@@ -724,8 +785,9 @@
                     newTime = ((50 * Math.floor((newTime / 50) + 0.5)) / 1000)
                     var timeline = timelines[$w(this).data("timelineIndex")];
                     self.selectedKeyframe.time = newTime * 1000;
-                    sortKeyframesByTime(timeline);
-                    $(this).css("left", posPercent + "%").attr("title", newTime);
+                    sortKeyframesByTime(timeline, true);
+                    $w(this).css("left", posPercent + "%").attr("title", newTime);
+                    setKeyframeSelected($w(this), true);
                 }
             });
         },
