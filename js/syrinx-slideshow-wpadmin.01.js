@@ -22,11 +22,12 @@
             }
         }});
 
+    var $currentSlideshow = null;
     function showSlideshow(id) {
         $(".syx-slideplayer").html("<div class='syx-slideshow-core'></div>").find(".syx-slideshow-core").load("/wp-admin/admin-ajax.php?action=syx_get_slideshow", {
             id: id
         }, function () {
-            $("#" + id).syrinxSlider({ "saveUrl": "/wp-admin/admin-ajax.php", "saveUrlData": { "action": "syx_save_slideshow"} }).syrinxSlideShowEditor();
+            $currentSlideshow = $("#" + id).syrinxSlider({ "saveUrl": "/wp-admin/admin-ajax.php", "saveUrlData": { "action": "syx_save_slideshow"} }).syrinxSlideShowEditor();
         });
     }
     $("body").on("change", ".syx-slide-id", function (event) {
@@ -50,12 +51,24 @@
         event.preventDefault();
         $.ajax("/wp-admin/admin-ajax.php", {
             data: {
-                action:"syx_delete_slideshow",
+                action: "syx_delete_slideshow",
                 ssId: $(this).parentsUntil("tbody").last().data("slideshowId")
             },
             type: "POST"
         }).done(function () {
             window.location.reload();
         });
+    }).on("sshowedit.uploadImg", function (event) {
+        formfield = "uploadField";// $('#top_bg_img').attr('id');
+        tb_show('', 'media-upload.php?type=image&TB_iframe=true');
     });
+
+    window.send_to_editor = function (html) {
+        imgurl = $('img', html).attr('src');
+        tb_remove();
+        //alert(imgurl);
+        if ($currentSlideshow)
+            $currentSlideshow.syrinxSlideShowEditor("setCurrentSlideImage", imgurl);
+    }
+
 })(jQuery);
