@@ -312,7 +312,7 @@ function queue_my_admin_scripts() {
     wp_enqueue_script('media-upload');
     wp_enqueue_style('thickbox');
     wp_enqueue_script('thickbox');
-    wp_enqueue_script('syrinxslideshow-wpadmin', plugins_url('/js/syrinx-slideshow-wpadmin.01.js', __FILE__),array('jquery','jquery-ui-dialog'),'',true);		    
+    wp_enqueue_script('syrinxslideshow-wpadmin', plugins_url('/js/syrinx-slideshow-wpadmin.02.js', __FILE__),array('jquery','jquery-ui-dialog'),'',true);		    
     wp_enqueue_style (  'wp-jquery-ui-dialog');
 }
 
