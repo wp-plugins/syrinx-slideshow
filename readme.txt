@@ -5,20 +5,19 @@ Requires at least: 2.7
 Tested up to: 3.4
 Stable tag: trunk
 
-Adds a flexible image slideshow that can be used either as fullpage background slideshow or as just an area within the page.
-Each image slide can have multiple animated layers, which use keyframes to allow for complex movement paths.
-Includes powerful timeline editor that lets you build your slideshow visually, which can be used directly on pages that contain a slideshow
-for true a WYSIWYG editing experience.
+Image slideshow that can have multiple animated layers. Includes powerful timeline editor that lets you build your slideshow visually.
 
 == Description ==
 
-The Syrinx slideshow is a powerful jquery plugin that can pan and zoom the slide image background. 
-It also supports unlimited animated layers that can each have an unlimited number of animation keyframes for complete control over layers and their animation while a slide is being displayed.
+Adds a flexible image slideshow that can be used either as fullpage background slideshow or as just an area within the page.
+Each image slide can have multiple animated layers, which use keyframes to allow for complex movement paths. Each slide can be configured to pan and zoom its image background. 
+Includes powerful timeline editor that lets you build your slideshow visually, which can be used directly on pages that contain a slideshow
+for true a WYSIWYG editing experience.
 
-The slideshow player can do two levels of downgrading its animations based on performance feedback from when the player first starts.  
-If the browser cannot keep up with the desired frame-rate within a certain tolerance, then it will stop zoom animation but still pan the background image.  
-If the speed of the browser is even more out of a 2nd tolerance, then it will also drop the panning and just switch immediately between slides.
-This level of performance allows the slideshow to work well in limited phone browsers that cannot keep up with that level of animation.  
+The slideshow player can do two levels of downgrading its animations based on performance feedback from when the player first starts. 
+If the browser cannot keep up with the desired frame-rate within a certain tolerance, then it will stop zoom animation but still pan the background image. 
+If the speed of the browser is even more out of a 2nd tolerance, then it will also drop the panning and just switch immediately between slides. 
+This level of performance allows the slideshow to work well in limited phone browsers that cannot keep up with that level of animation. 
 This has tested well on a Samsung Galaxy phone as well as the Samsung Galaxy 10.1.  The 10.1 is actually slower at the animation than the phone, which is due to the number of pixels being pushed around.
 The IPad works well with the animations.  When the slideshow player is used in full screen mode, the controller works well with a touch interface.
 
