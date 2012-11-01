@@ -39,6 +39,11 @@ The IPad works well with the animations.  When the slideshow player is used in f
 
 == Changelog ==
 
+= 1.0.12 =
+* Added Upload button to image field in slideshow editor, which will popup the standard image thickbox from wordpress.  This allows images to be
+set from wordpress directly rather than needing to use drag/drop like prior versions.
+* Added a help link to the left, just below the filmstrip, which will popup a help window to explain how to use the editor.
+
 = 1.0.11 =
 * Removed the standard post editor for the syx_slideshow custom post type from the main menu so that only the new Syrinx Slideshow admin page is
 shown in the main admin menu.

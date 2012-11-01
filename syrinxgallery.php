@@ -20,9 +20,9 @@ function my_scripts_method() {
     wp_enqueue_script( 'jquery' );
     wp_enqueue_script( 'jqueryui');
     wp_enqueue_style('syrinxslideshow-style', plugins_url('/css/SyrinxSlideShow.css', __FILE__));
-    wp_enqueue_script('syrinxslideshow', plugins_url('/js/jquery.syrinx-slideshow-.07.js', __FILE__),array('jquery'),'',true);
-	wp_enqueue_script('syrinxslideshow-controllers', plugins_url('/js/jquery.syrinx-slideshow-controllers-.01.js', __FILE__),array('jquery'),'',true);
-    wp_enqueue_script('syrinxslideshow-editor', plugins_url('/js/jquery.syrinx-slideshow-editor-.03.js', __FILE__),array('jquery'),'',true);		
+    wp_enqueue_script('syrinxslideshow', plugins_url('/js/jquery.syrinx-slideshow-.08.js', __FILE__),array('jquery'),'',true);
+	wp_enqueue_script('syrinxslideshow-controllers', plugins_url('/js/jquery.syrinx-slideshow-controllers-.02.js', __FILE__),array('jquery'),'',true);
+    wp_enqueue_script('syrinxslideshow-editor', plugins_url('/js/jquery.syrinx-slideshow-editor-.04.js', __FILE__),array('jquery'),'',true);		
 }    
 
 function syx_saveSlideShowAsPost($id, $html, $asPage) {
@@ -310,6 +310,7 @@ function queue_my_admin_scripts() {
     syx_moveFileSlideShowsToPosts();
     my_scripts_method();
     wp_enqueue_script('media-upload');
+    wp_enqueue_style('thickbox');
     wp_enqueue_script('thickbox');
     wp_enqueue_script('syrinxslideshow-wpadmin', plugins_url('/js/syrinx-slideshow-wpadmin.01.js', __FILE__),array('jquery','jquery-ui-dialog'),'',true);		    
     wp_enqueue_style (  'wp-jquery-ui-dialog');

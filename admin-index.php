@@ -1,6 +1,7 @@
 <?php
 
 ?>
+<input type="hidden" id="uploadField"/>
 <div class="syx-slideshow-editor">
     <div class="wrap">
 <div id="icon-edit" class="icon32 icon32-posts-post"><br></div>
