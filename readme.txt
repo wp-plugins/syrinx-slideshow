@@ -30,6 +30,10 @@ Please note that this version is still in the works.  I will update this descrip
 
 == Changelog ==
 
+= 1.0.11 =
+* Removed the standard post editor for the syx_slideshow custom post type from the main menu so that only the new Syrinx Slideshow admin page is
+shown in the main admin menu.
+
 = 1.0.10 =
 * This gives a good view into how editing within the popup slideshow editor window will work.  It is now possible to create a new slide, add a new layer, edit the
 content within the layer, add multiple keyframes on the timeline, and then save properly.
