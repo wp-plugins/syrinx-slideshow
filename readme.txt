@@ -38,6 +38,8 @@ The IPad works well with the animations.  When the slideshow player is used in f
 3. screenshot-3.jpg
 
 == Changelog ==
+= 1.0.13 =
+* Updated JavaScript filenames to reflect new versions.
 
 = 1.0.12 =
 * Added Upload button to image field in slideshow editor, which will popup the standard image thickbox from wordpress.  This allows images to be
