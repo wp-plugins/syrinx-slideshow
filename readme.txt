@@ -38,6 +38,9 @@ The IPad works well with the animations.  When the slideshow player is used in f
 3. screenshot-3.jpg
 
 == Changelog ==
+= 1.0.16 = 
+* Another minor fix for leaving code commented out from version 1.0.14.
+
 = 1.0.15 = 
 * Fixed bug introduced in 1.0.14 that prevented the slideshow list from showing properly in the admin page.
 

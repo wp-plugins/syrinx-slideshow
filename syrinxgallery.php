@@ -1,14 +1,14 @@
 <?php
 /**
  * @package syrinxgallery
- * @version 1.0.15
+ * @version 1.0.16
  */
 /*
 Plugin Name: Syrinx Slideshow Gallery and Editor
 Plugin URI: http://wordpress.kusog.org/?p=12
 Description: The Syrinx Slideshow provides 3 powerful jQuery plugins for playing, controlling, and editing slideshows with multiple options for how slideshows can be displayed in a WordPress site.  Each slide background image can pan & zoom while having multiple animated layers displaying over it it.  Powerful editor allows for finetune, multi keyframe animation definitions with amazing results.
 Author: Maryann Denman / Matt Denman
-Version: 1.0.15
+Version: 1.0.16
 Author URI: http://wordpress.kusog.org/
 */
 
@@ -291,7 +291,7 @@ add_action('admin_menu', 'register_custom_menu_page');
 
 function register_custom_menu_page() {
     add_menu_page('Site Slideshows', 'Slideshows', 'add_users', 'syrinx-slideshow/admin-index.php', '',   plugins_url('syrinx-slideshow/images/icon.png'), 6);
-    //remove_menu_page( 'edit.php?post_type=syx_slideshow' );
+    remove_menu_page( 'edit.php?post_type=syx_slideshow' );
    
 }
 
