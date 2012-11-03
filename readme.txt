@@ -38,6 +38,9 @@ The IPad works well with the animations.  When the slideshow player is used in f
 3. screenshot-3.jpg
 
 == Changelog ==
+= 1.0.15 = 
+* Fixed bug introduced in 1.0.14 that prevented the slideshow list from showing properly in the admin page.
+
 = 1.0.14 =
 * Fixed the broken view link on the slideshow admin page.  It now navigates to a view mode of the post.  This also makes it easier to link to a slideshow directly without having to embed it in a post or use a widget.  Just make the slideshow and use its URL.  
 With this option, you can now go into the edit mode of the slideshow post and see the raw html of the post, which can be modified outside the abilities of the editor.
