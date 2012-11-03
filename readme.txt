@@ -38,6 +38,12 @@ The IPad works well with the animations.  When the slideshow player is used in f
 3. screenshot-3.jpg
 
 == Changelog ==
+= 1.0.14 =
+* Fixed the broken view link on the slideshow admin page.  It now navigates to a view mode of the post.  This also makes it easier to link to a slideshow directly without having to embed it in a post or use a widget.  Just make the slideshow and use its URL.  
+With this option, you can now go into the edit mode of the slideshow post and see the raw html of the post, which can be modified outside the abilities of the editor.
+* Added a wordpress specific JS file that helps autobind slideshow markup to the appropriate jQuery plugin.  Previously, each slideshow was pushed into the markup with a little javascript block to kick that specific slideshow off.  This is better.
+* Note for future release: Once version 1.1 is released, it will include a minified version of all 3 script files.
+
 = 1.0.13 =
 * Updated JavaScript filenames to reflect new versions.
 

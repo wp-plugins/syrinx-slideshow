@@ -341,7 +341,7 @@
                             if (foundData[dataIdChecks[i]] != true) {
                                 var val = $el.data(dataIdChecks[i]);
                                 if (val) {
-                                    html += " data-" + dataIdChecks[i] + "=\"" + val + "\"";
+                                    html += " data-" + dataIdChecks[i] + "='" + val + "'";
                                 }
                             }
                         }

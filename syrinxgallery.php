@@ -1,14 +1,14 @@
 <?php
 /**
  * @package syrinxgallery
- * @version 1.0.13
+ * @version 1.0.14
  */
 /*
 Plugin Name: Syrinx Slideshow Gallery and Editor
 Plugin URI: http://wordpress.kusog.org/?p=12
 Description: The Syrinx Slideshow provides 3 powerful jQuery plugins for playing, controlling, and editing slideshows with multiple options for how slideshows can be displayed in a WordPress site.  Each slide background image can pan & zoom while having multiple animated layers displaying over it it.  Powerful editor allows for finetune, multi keyframe animation definitions with amazing results.
 Author: Maryann Denman / Matt Denman
-Version: 1.0.13
+Version: 1.0.14
 Author URI: http://wordpress.kusog.org/
 */
 
@@ -23,6 +23,7 @@ function my_scripts_method() {
     wp_enqueue_script('syrinxslideshow', plugins_url('/js/jquery.syrinx-slideshow-.08.js', __FILE__),array('jquery'),'',true);
 	wp_enqueue_script('syrinxslideshow-controllers', plugins_url('/js/jquery.syrinx-slideshow-controllers-.02.js', __FILE__),array('jquery'),'',true);
     wp_enqueue_script('syrinxslideshow-editor', plugins_url('/js/jquery.syrinx-slideshow-editor-.04.js', __FILE__),array('jquery'),'',true);		
+    wp_enqueue_script('syrinxslideshow-wp', '/wp-admin/admin-ajax.php?action=syx_get_wpJs',array('syrinxslideshow'),'',true);		
 }    
 
 function syx_saveSlideShowAsPost($id, $html, $asPage) {
@@ -65,7 +66,8 @@ function syx_getSlideshowsFromPosts() {
             array_push($list, array('id' => $post->post_title, 'title' => $post->post_title, 'author' => $user->display_name, 'date' => $post->post_date, 'html' => $post->post_content));
     }
 
-    return $list;
+    echo $list;
+    die();
 }
 
 
@@ -88,15 +90,7 @@ function create_post_type() {
 function syx_sc_insertSlideShow($attr) {
     global $syx_usePageForSlideshow;
     $id = $attr["id"];
-    $html = syx_get_slideshowI($id).'<script>jQuery(function() {jQuery("#'.$id.'").syrinxSlider()';
-    
-    if(current_user_can("edit_posts")) {
-        $html .= '.syrinxSlideShowEditor();';
-    }
-    else {
-        $html .= ';';
-    }
-    $html .= '});</script>';
+    $html = syx_get_slideshowI($id);
 
     return $html;
 }
@@ -148,6 +142,16 @@ function syx_get_slideshowI($id) {
 
     return $html;
  }
+
+function syx_get_wpJs() {
+    header('Content-type: text/javascript');
+    $script = '(function ($) {$(function () { var $slideshows = $(".entry .ksg-slide-show").syrinxSlider();';
+    if(current_user_can("edit_posts")) 
+            $script .= '$slideshows.syrinxSlideShowEditor();';
+    $script .= '});})(jQuery);';
+    echo $script;
+    die();
+}
 
 function syx_getExistingSlideShowIds() {
     global $syx_usePageForSlideshow;
@@ -279,6 +283,8 @@ add_shortcode('syrinxslideshow', 'syx_sc_insertSlideShow');
 add_action('wp_ajax_syx_save_slideshow', 'syx_save_slideshowx');
 add_action('wp_ajax_syx_get_slideshow', 'syx_get_slideshow');
 add_action('wp_ajax_nopriv_syx_save_slideshow', 'syx_save_slideshowx');
+add_action('wp_ajax_syx_get_wpJs', 'syx_get_wpJs');
+add_action('wp_ajax_nopriv_syx_get_wpJs', 'syx_get_wpJs');
 
 add_action('admin_enqueue_scripts', 'queue_my_admin_scripts');
 

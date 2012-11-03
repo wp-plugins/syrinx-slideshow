@@ -46,7 +46,7 @@
                 <div class="row-actions">
                     <span class="edit"><a class="syx-view" href="#">Edit</a> | </span>
                     <span class="delete"><a class="submitdelete" href="#">Delete Permanently</a> | </span>
-                    <span class="view"><a href="#" title="View “Setup of WordPress site complete”" rel="permalink">View</a></span>
+                    <span class="view"><a href="/?syx_slideshow=<?php echo $sshow['id']; ?>" title="View “Setup of WordPress site complete”" rel="permalink">View</a></span>
                 </div>
             </td>
 		    <td class="author column-author"><?php echo $sshow['author']; ?></td>
