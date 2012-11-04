@@ -1,14 +1,14 @@
 <?php
 /**
  * @package syrinxgallery
- * @version 1.0.16
+ * @version 1.0.17
  */
 /*
 Plugin Name: Syrinx Slideshow Gallery and Editor
 Plugin URI: http://wordpress.kusog.org/?p=12
 Description: The Syrinx Slideshow provides 3 powerful jQuery plugins for playing, controlling, and editing slideshows with multiple options for how slideshows can be displayed in a WordPress site.  Each slide background image can pan & zoom while having multiple animated layers displaying over it it.  Powerful editor allows for finetune, multi keyframe animation definitions with amazing results.
 Author: Maryann Denman / Matt Denman
-Version: 1.0.16
+Version: 1.0.17
 Author URI: http://wordpress.kusog.org/
 */
 
@@ -22,7 +22,7 @@ function my_scripts_method() {
     wp_enqueue_style('syrinxslideshow-style', plugins_url('/css/SyrinxSlideShow.css', __FILE__));
     wp_enqueue_script('syrinxslideshow', plugins_url('/js/jquery.syrinx-slideshow-.08.js', __FILE__),array('jquery'),'',true);
 	wp_enqueue_script('syrinxslideshow-controllers', plugins_url('/js/jquery.syrinx-slideshow-controllers-.02.js', __FILE__),array('jquery'),'',true);
-    wp_enqueue_script('syrinxslideshow-editor', plugins_url('/js/jquery.syrinx-slideshow-editor-.04.js', __FILE__),array('jquery'),'',true);		
+    wp_enqueue_script('syrinxslideshow-editor', plugins_url('/js/jquery.syrinx-slideshow-editor-.05.js', __FILE__),array('jquery'),'',true);		
     wp_enqueue_script('syrinxslideshow-wp', '/wp-admin/admin-ajax.php?action=syx_get_wpJs',array('syrinxslideshow'),'',true);		
 }    
 
@@ -349,4 +349,23 @@ function syx_delete_slideshow() {
     die();
 }
 add_action('wp_ajax_syx_delete_slideshow','syx_delete_slideshow');
+
+add_action( 'admin_menu', 'my_admin_setup' );
+
+function my_admin_setup() {
+
+	/* Custom help message. */
+	$text = '<p>' . __( 'This is an example of contextual help in WordPress, you could edit this to put information about your plugin or theme so that users will understand what the heck is going on.', 'example-textdomain' ) . '</p>';
+
+	/* Add documentation and support forum links. */
+	$text .= '<p><strong>' . __( 'For more information:', 'example-textdomain' ) . '</strong></p>';
+
+	$text .= '<ul>';
+	$text .= '<li><a href="http://yoursite.com/theme-documentation">' . __( 'Documentation', 'example-textdomain' ) . '</a></li>';
+	$text .= '<li><a href="http://yoursite.com/support">' . __( 'Support Forums', 'example-textdomain' ) . '</a></li>';
+	$text .= '</ul>';
+
+	add_contextual_help( 'appearance_page_theme-settings', $text );
+}
+
 ?>

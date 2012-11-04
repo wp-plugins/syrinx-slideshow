@@ -38,6 +38,9 @@ The IPad works well with the animations.  When the slideshow player is used in f
 3. screenshot-3.jpg
 
 == Changelog ==
+= 1.0.17 =
+* Added fix for adding new slide failing to set image properly for just its own cell.  Adding new slides and setting their image now works as expected.
+
 = 1.0.16 = 
 * Another minor fix for leaving code commented out from version 1.0.14.
 

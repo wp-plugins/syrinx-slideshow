@@ -31,12 +31,16 @@
         getOptions: function () {
             return this.options;
         },
+        
+        _filmStrip: function () {
+            return this.$w(".ksg-filmstrip-track");
+        },
 
         _selectedFilmstripEl: function() {
-            return this.$filmstrip.find(".ksg-slide-filmcell.selected");
+            return this._filmStrip().find(".ksg-slide-filmcell.selected");
         },
         _filmstripEls: function () {
-            return this.$filmstrip.find(".ksg-slide-filmcell");
+            return this._filmStrip().find(".ksg-slide-filmcell");
         },
         _playerSlideEls: function () {
             return this.$el.find(".ksg-slide");
@@ -79,11 +83,12 @@
             $w("#imageUrl").val(imgurl);
         },
 
-        _setupFilmStripCell: function($editSlides) {
+        _setupFilmStripCell: function($editSlides, asSelected) {
             var self = this, $w = self.$w, $ssbody = $w("body"), $slides = self._playerSlideEls();
             var $horzMove = $w("#horzMove"), $vertMove = $w("#vertMove"), $zoom = $w("#zoom"), $slideImgUrl = $w("#imageUrl");
 
             function setSelectedCell(filmCell) {
+                $editSlides = self._filmstripEls();
                 $editSlides.removeClass("selected");
                 var $editSlide = $w(filmCell).addClass("selected");
                 var origIndex = $editSlide.data("origIndex");
@@ -112,6 +117,9 @@
                 self.$el.syrinxSlider("moveTo", origIndex);
                 self._showSlideLayers($editSlide);
             }
+
+            if(asSelected == true)
+                setSelectedCell($editSlides);
 
             $editSlides.bind("drop", function (event, ui) {
                 if (event.originalEvent.dataTransfer) {
@@ -291,10 +299,15 @@
                 $slideFilmStrip = self._selectedFilmstripEl();
 
             var layers = $slideFilmStrip.data("layers");
-            for (var pos = 0; pos < layers.length; pos++) {
-                html += "<div>" +
-                    "<input type='text' class='layer-name' value='" + layers[pos].title + "' data-orig-index='" + pos + "'></input></div>";
+            if (layers) {
+                for (var pos = 0; pos < layers.length; pos++) {
+                    html += "<div>" +
+                        "<input type='text' class='layer-name' value='" + layers[pos].title + "' data-orig-index='" + pos + "'></input></div>";
+                }
             }
+            else
+                layers = [];
+
             html += "</div>";
             this.$w(".ksg-slide-layers").html(html);
 
@@ -483,7 +496,7 @@
                         "</div></div>";
             var index = self._playerSlideEls().length;
             var $slide = $(html).appendTo(self.$el);
-            self._setupFilmStripCell($w(self._slideStripCellHtml($slide, index)).appendTo(".ksg-filmstrip-corearea tr").find(".ksg-slide-filmcell"));
+            self._setupFilmStripCell($w(self._slideStripCellHtml($slide, index)).appendTo(".ksg-filmstrip-corearea tr").find(".ksg-slide-filmcell"), true);
             self._setupFilmstripImgSizes();
             self.$el.syrinxSlider("refresh");
             //self._updateSlideShow();
