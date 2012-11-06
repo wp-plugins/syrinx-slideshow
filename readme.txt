@@ -9,6 +9,9 @@ Image slideshow that can have multiple animated layers. Includes powerful timeli
 
 == Description ==
 
+1. [Plugin Site](http://wordpress.kusog.org/using-syrinx-slideshow/)
+2. [Plugin Documentation](http://wordpress.kusog.org/category/docs/)
+
 Adds a flexible image slideshow that can be used either as fullpage background slideshow or as just an area within the page.
 Each image slide can have multiple animated layers, which use keyframes to allow for complex movement paths. Each slide can be configured to pan and zoom its image background. 
 Includes powerful timeline editor that lets you build your slideshow visually, which can be used directly on pages that contain a slideshow
@@ -20,9 +23,6 @@ If the speed of the browser is even more out of a 2nd tolerance, then it will al
 This level of performance allows the slideshow to work well in limited phone browsers that cannot keep up with that level of animation. 
 This has tested well on a Samsung Galaxy phone as well as the Samsung Galaxy 10.1.  The 10.1 is actually slower at the animation than the phone, which is due to the number of pixels being pushed around.
 The IPad works well with the animations.  When the slideshow player is used in full screen mode, the controller works well with a touch interface.
-
-1. [Site](http://wordpress.kusog.org)
-2. [How To Use Guide](http://wordpress.kusog.org/?p=41)
 
 
 == Installation ==
