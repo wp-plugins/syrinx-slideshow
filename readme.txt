@@ -9,8 +9,9 @@ Image slideshow that can have multiple animated layers. Includes powerful timeli
 
 == Description ==
 
-1. [Plugin Site](http://wordpress.kusog.org/using-syrinx-slideshow/)
-2. [Plugin Documentation](http://wordpress.kusog.org/category/docs/)
+1. [Plugin Site](http://wordpress.kusog.org/slideshow-including-powerful-editor/)
+2. [Basic Editing Overview](http://wordpress.kusog.org/using-syrinx-slideshow/)
+3. [Plugin Documentation List](http://wordpress.kusog.org/category/docs/)
 
 Adds a flexible image slideshow that can be used either as fullpage background slideshow or as just an area within the page.
 Each image slide can have multiple animated layers, which use keyframes to allow for complex movement paths. Each slide can be configured to pan and zoom its image background. 
