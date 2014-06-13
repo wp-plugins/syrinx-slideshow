@@ -1,14 +1,14 @@
 <?php
 /**
  * @package syrinxgallery
- * @version 1.0.18
+ * @version 1.1.0
  */
 /*
 Plugin Name: Syrinx Slideshow Gallery and Editor
 Plugin URI: http://wordpress.kusog.org/slideshow-including-powerful-editor/
 Description: The Syrinx Slideshow provides 3 powerful jQuery plugins for playing, controlling, and editing slideshows with multiple options for how slideshows can be displayed in a WordPress site.  Each slide background image can pan & zoom while having multiple animated layers displaying over it it.  Powerful editor allows for finetune, multi keyframe animation definitions with amazing results.
 Author: Maryann Denman / Matt Denman
-Version: 1.0.18
+Version: 1.1.0
 Author URI: http://wordpress.kusog.org/
 */
 
@@ -144,9 +144,9 @@ function syx_get_slideshowI($id) {
 
 function syx_get_wpJs() {
     header('Content-type: text/javascript');
-    $script = '(function ($) {$(function () { var $slideshows = $(".entry .ksg-slide-show").syrinxSlider();';
+    $script = '(function ($) {$(function () { var $slideshows = $(".entry-content .ksg-slide-show").syrinxSlider({});';
     if(current_user_can("edit_posts")) 
-            $script .= '$slideshows.syrinxSlideShowEditor();';
+            $script .= '$slideshows.syrinxSlideShowEditor({});';
     $script .= '});})(jQuery);';
     echo $script;
     die();
@@ -258,9 +258,9 @@ class Syrinx_SlideShow extends WP_Widget {
 		echo $before_widget;
 
         
-        $html = syx_get_slideshowI($ssId).'<script>jQuery(function() {jQuery("#'.$ssId.'").syrinxSlider()';
+        $html = syx_get_slideshowI($ssId).'<script>jQuery(function() {jQuery("#'.$ssId.'").syrinxSlider({})';
         if(current_user_can("edit_posts")) {
-        $html .= '.syrinxSlideShowEditor();';
+        $html .= '.syrinxSlideShowEditor({});';
         }
         else {
             $html .= ';';

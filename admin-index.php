@@ -69,7 +69,7 @@
 <div class="syx-slideplayer"></div>
 </div>
 
-<div class="syx-new-slide-dialog" style="position:absolute;display:none;">
+<div class="syx-new-slide-dialog" style="position:absolute;display:none;width:400px">
   <label>New Slide Id:</label>
   <input type="text" id="syx_new_ssId" />
 </div>

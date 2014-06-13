@@ -1,8 +1,8 @@
 === Syrinx Slideshow ===
 Contributors: Maryann Denman, Matt Denman
 Tags: javascript, slideshow, images
-Requires at least: 2.7
-Tested up to: 3.4
+Requires at least: 3.9.1
+Tested up to: 3.9.1
 Stable tag: trunk
 
 Image slideshow that can have multiple animated layers. Includes powerful timeline editor that lets you build your slideshow visually.
@@ -39,6 +39,9 @@ The IPad works well with the animations.  When the slideshow player is used in f
 3. screenshot-3.jpg
 
 == Changelog ==
+= 1.1.0 =
+* Updates to support proper functioning in WordPress 3.9.1
+
 = 1.0.18 =
 * Updated links to support documentation.
 

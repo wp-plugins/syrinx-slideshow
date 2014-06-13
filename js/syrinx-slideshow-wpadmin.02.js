@@ -2,8 +2,10 @@
     var $info = $(".syx-new-slide-dialog");
     $info.dialog({
         'dialogClass': 'wp-dialog',
-        'title': 'Create New Syrinx Slideshow',
+        'title': 'Create New Slideshow',
         'modal': true,
+        'width': 400,
+        'height': 250,
         'autoOpen': false,
         'closeOnEscape': true,
         'buttons': {
